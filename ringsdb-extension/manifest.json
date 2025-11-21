@@ -1,0 +1,66 @@
+{
+  "manifest_version": 3,
+  "name": "RingsDB 工具",
+  "version": "3.4",
+  "description": "RingsDB 工具，卡牌收藏管理加上中文翻譯",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://ringsdb.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://ringsdb.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "content.css"
+      ],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "https://ringsdb.com/*"
+      ],
+      "js": [
+        "content2.js"
+      ],
+      "run_at": "document_start"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "RingsDB 工具",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "content.css",
+        "inject.js",
+        "translation.json"
+      ],
+      "matches": [
+        "https://ringsdb.com/*"
+      ]
+    }
+  ]
+}
