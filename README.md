@@ -1,7 +1,7 @@
 # RingsDB_Chinese_Tools
 
-用来在https://ringsdb.com/上翻译卡名，看牌组更方便。
-(只能在https://ringsdb.com/上使用)
+用来在ringsdb.com 上翻译卡名，看牌组更方便。
+(只能在https://ringsdb.com/ 上使用)
 
 
 可以透過新增deck來更新銀星計畫的牌。

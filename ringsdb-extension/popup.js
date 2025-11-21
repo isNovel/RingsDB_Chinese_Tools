@@ -439,7 +439,7 @@ async function notifyDeckEditPages() {
     try {
         console.log('[RingsDB Extension] 查询 deck edit 页面...');
 
-        const tabs = await chrome.tabs.query({ url: 'https://ringsdb.com/deck/edit/*' });
+        const tabs = await chrome.tabs.query({ url: 'https://*.ringsdb.com/deck/edit/*' });
 
         console.log('[RingsDB Extension] 找到', tabs.length, '个 deck edit 页面');
 

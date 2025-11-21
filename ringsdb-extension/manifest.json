@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "RingsDB 工具",
-  "version": "3.4",
+  "version": "3.5",
   "description": "RingsDB 工具，卡牌收藏管理加上中文翻譯",
   "permissions": [
     "storage",
@@ -9,12 +9,12 @@
     "tabs"
   ],
   "host_permissions": [
-    "https://ringsdb.com/*"
+    "https://*.ringsdb.com/*"
   ],
   "content_scripts": [
     {
       "matches": [
-        "https://ringsdb.com/*"
+        "https://*.ringsdb.com/*"
       ],
       "js": [
         "content.js"
@@ -26,7 +26,7 @@
     },
     {
       "matches": [
-        "https://ringsdb.com/*"
+        "https://*.ringsdb.com/*"
       ],
       "js": [
         "content2.js"
@@ -59,7 +59,7 @@
         "translation.json"
       ],
       "matches": [
-        "https://ringsdb.com/*"
+        "https://*.ringsdb.com/*"
       ]
     }
   ]

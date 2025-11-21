@@ -1,7 +1,5 @@
 // RingsDB Chrome Extension Background Script
 // 处理扩展的后台逻辑
-
-
 console.log('[RingsDB Extension] Background script 已加载');
 
 // 监听扩展安装和更新
@@ -42,9 +40,6 @@ async function handleMessage(request, sender, sendResponse) {
         let result;
 
         switch (request.action) {
-            case 'getStats':
-                result = await getStats();
-                break;
 
             case 'getExpansions':
                 result = await getExpansions();
@@ -52,18 +47,6 @@ async function handleMessage(request, sender, sendResponse) {
 
             case 'importExpansions':
                 result = await importExpansions(request.data); // ✅ 改成接 data
-                break;
-
-            case 'getFavoriteCards':
-                result = await getFavoriteCards();
-                break;
-
-            case 'getAllCollectionCards':
-                result = await getAllCollectionCards();
-                break;
-
-            case 'createExpansion':
-                result = await createExpansion(request.name);
                 break;
 
             case 'createExpansionWithCards':
@@ -82,9 +65,6 @@ async function handleMessage(request, sender, sendResponse) {
                 result = await deleteExpansion(request.expansionId);
                 break;
 
-            case 'addCardsToExpansion':
-                result = await addCardsToExpansion(request.expansionId, request.cards);
-                break;
 
             case 'clearAllExpansions':
                 result = await clearAllExpansions();
@@ -101,33 +81,6 @@ async function handleMessage(request, sender, sendResponse) {
     }
 }
 
-// 获取统计信息
-async function getStats() {
-    const result = await chrome.storage.local.get('ringsdb_expansions');
-    const expansions = result.ringsdb_expansions || {};
-
-    let totalCards = 0;
-    let uniqueCards = new Set();
-
-    Object.values(expansions).forEach(expansion => {
-        if (expansion.cards) {
-            Object.entries(expansion.cards).forEach(([code, card]) => {
-                totalCards += card.count || 1;
-                uniqueCards.add(code);
-            });
-        }
-    });
-
-    return {
-        success: true,
-        data: {
-            expansionCount: Object.keys(expansions).length,
-            totalCards: totalCards,
-            uniqueCards: uniqueCards.size,
-            expansions: expansions
-        }
-    };
-}
 
 // 获取扩展列表
 async function getExpansions() {
@@ -155,94 +108,7 @@ async function importExpansions(newExpansions) {
     };
 }
 
-// 获取收藏卡牌列表 (聚合相同卡牌的数量)
-async function getFavoriteCards() {
-    const result = await chrome.storage.local.get('ringsdb_expansions');
-    const expansions = result.ringsdb_expansions || {};
-    const cardMap = {};
 
-    Object.values(expansions).forEach(expansion => {
-        if (expansion.cards) {
-            Object.values(expansion.cards).forEach(card => {
-                const code = card.code;
-
-                if (!cardMap[code]) {
-                    cardMap[code] = {
-                        code: code,
-                        name: card.name,
-                        count: 0,
-                        expansionIds: [],
-                        expansionNames: []
-                    };
-                }
-
-                cardMap[code].count += card.count || 1;
-
-                if (!cardMap[code].expansionIds.includes(expansion.id)) {
-                    cardMap[code].expansionIds.push(expansion.id);
-                    cardMap[code].expansionNames.push(expansion.name);
-                }
-            });
-        }
-    });
-
-    const favoriteCards = Object.values(cardMap)
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .map(card => ({
-            code: card.code,
-            name: card.name,
-            count: card.count,
-            expansionCount: card.expansionIds.length,
-            expansionNames: card.expansionNames.join(', ')
-        }));
-
-    return { success: true, data: favoriteCards };
-}
-
-// 获取所有收藏卡牌 (聚合数量)
-async function getAllCollectionCards() {
-    const result = await chrome.storage.local.get('ringsdb_expansions');
-    const expansions = result.ringsdb_expansions || {};
-    const cardMap = {};
-
-    Object.values(expansions).forEach(expansion => {
-        if (expansion.cards) {
-            Object.entries(expansion.cards).forEach(([cardKey, card]) => {
-                const code = card.code;
-
-                if (!cardMap[code]) {
-                    cardMap[code] = {
-                        name: card.name,
-                        count: 0
-                    };
-                }
-
-                cardMap[code].count += card.count || 1;
-            });
-        }
-    });
-
-    return { success: true, data: cardMap };
-}
-
-// 创建新扩展
-async function createExpansion(name) {
-    const result = await chrome.storage.local.get('ringsdb_expansions');
-    const expansions = result.ringsdb_expansions || {};
-    const expansionId = generateExpansionId();
-
-    expansions[expansionId] = {
-        id: expansionId,
-        name: name || '新扩展',
-        created: new Date().toISOString(),
-        cards: {}
-    };
-
-    await chrome.storage.local.set({ ringsdb_expansions: expansions });
-    console.log('[RingsDB Extension] 扩展创建成功:', expansionId);
-
-    return { success: true, message: '扩展创建成功', expansionId: expansionId };
-}
 
 // 创建新扩展并包含卡牌
 async function createExpansionWithCards(name, cardsData) {
@@ -341,38 +207,6 @@ async function deleteExpansion(expansionId) {
     return { success: true, message: '扩展删除成功' };
 }
 
-// 向扩展添加卡牌
-async function addCardsToExpansion(expansionId, cardsData) {
-    const result = await chrome.storage.local.get('ringsdb_expansions');
-    const expansions = result.ringsdb_expansions || {};
-
-    if (!expansions[expansionId]) {
-        throw new Error('扩展不存在');
-    }
-
-    const expansion = expansions[expansionId];
-
-    Object.entries(cardsData).forEach(([code, cardData]) => {
-        if (expansion.cards[code]) {
-            // 如果卡牌已存在，更新数量
-            expansion.cards[code].count += cardData.count || 1;
-        } else {
-            // 如果卡牌不存在，添加新卡牌
-            expansion.cards[code] = {
-                code: code,
-                name: cardData.name || code,
-                count: cardData.count || 1,
-                added: new Date().toISOString()
-            };
-        }
-    });
-
-    expansion.modified = new Date().toISOString();
-    await chrome.storage.local.set({ ringsdb_expansions: expansions });
-    console.log('[RingsDB Extension] 卡牌添加到扩展成功');
-
-    return { success: true, message: '卡牌添加成功' };
-}
 
 // 清除所有扩展数据
 async function clearAllExpansions() {
