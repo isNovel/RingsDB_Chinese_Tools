@@ -6,6 +6,8 @@
 
 可以透過新增deck來更新銀星計畫的牌。
 
+chrome 商店頁面可以下載安裝
+https://chromewebstore.google.com/detail/ajhblmpfmhljeipjndepbbgnjigdodge?utm_source=item-share-cb
 
 
 
