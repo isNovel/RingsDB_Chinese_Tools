@@ -16,3 +16,6 @@
 
 
 注意这个资料夹之后不能删除，所以可以事先放到C:
+
+
+https://github.com/isNovel/RingsDB_Chinese_Tools

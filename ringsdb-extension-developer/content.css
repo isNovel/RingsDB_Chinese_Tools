@@ -1,0 +1,99 @@
+/* RingsDB Extension Content Styles */
+
+.ringsdb-favorite-btn {
+    z-index: 1000 !important;
+    pointer-events: auto !important;
+}
+
+.ringsdb-favorite-btn:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+}
+
+.ringsdb-card-count {
+    z-index: 1000 !important;
+    pointer-events: auto !important;
+}
+
+.ringsdb-card-count input {
+    z-index: 1000 !important;
+    pointer-events: auto !important;
+}
+
+.ringsdb-card-count input:focus {
+    outline: 2px solid #3498db;
+    outline-offset: 2px;
+}
+
+/* 为收藏的卡牌添加动画效果 */
+[data-ringsdb-decorated][style*="border: 2px solid #3498db"] {
+    animation: ringsdb-owned-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes ringsdb-owned-glow {
+    from {
+        box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+    }
+    to {
+        box-shadow: 0 0 16px rgba(52, 152, 219, 0.7);
+    }
+}
+
+/* 为牌库中的卡牌添加动画效果 */
+[data-ringsdb-decorated][style*="border: 2px solid #27ae60"] {
+    animation: ringsdb-deck-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes ringsdb-deck-glow {
+    from {
+        box-shadow: 0 0 8px rgba(39, 174, 96, 0.3);
+    }
+    to {
+        box-shadow: 0 0 16px rgba(39, 174, 96, 0.7);
+    }
+}
+
+/* 控制台提示样式 */
+#ringsdb-favorite-controls {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
+#ringsdb-favorite-controls:hover {
+    transform: scale(1.05);
+    transition: transform 0.2s ease;
+}
+
+/* 确保扩展UI在最上层 */
+#ringsdb-favorite-controls,
+.ringsdb-favorite-btn,
+.ringsdb-card-count {
+    z-index: 999999 !important;
+}
+
+/* 防止扩展UI被其他元素遮挡 */
+.ringsdb-favorite-btn > div,
+.ringsdb-card-count > input {
+    position: relative !important;
+    z-index: 999999 !important;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    #ringsdb-favorite-controls {
+        font-size: 10px !important;
+        padding: 8px !important;
+        top: 5px !important;
+        right: 5px !important;
+    }
+    
+    .ringsdb-favorite-btn > div {
+        width: 16px !important;
+        height: 16px !important;
+        font-size: 10px !important;
+    }
+    
+    .ringsdb-card-count > input {
+        width: 30px !important;
+        font-size: 10px !important;
+    }
+}

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>RingsDB 简中工具 - 完整版</title>
+    <title>RingsDB 简中工具</title>
     <style>
         /* 基本样式 */
         body {
@@ -24,22 +24,13 @@
             font-size: 18px;
         }
 
-        h4 {
-            margin-top: 0;
-            margin-bottom: 10px;
-            color: #555;
-            font-size: 16px;
-            border-bottom: 1px dashed #ccc;
-            padding-bottom: 5px;
-        }
-
         .container {
             padding: 15px;
         }
 
         /* 模式控制区块 */
         .mode-controls {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             padding: 15px;
             background-color: #fff;
             border-radius: 8px;
@@ -48,11 +39,12 @@
         }
 
         .mode-controls h4 {
-            margin-bottom: 15px;
-            border: none;
-            padding-bottom: 0;
-            color: #333;
-            font-size: 16px;
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #555;
+            font-size: 14px;
+            border-bottom: 1px dashed #ccc;
+            padding-bottom: 5px;
         }
 
         .mode-controls button {
@@ -75,77 +67,7 @@
             font-weight: bold;
         }
 
-        /* 收藏功能折叠区块 - 使用 details/summary 元素 */
-        .favorites-section {
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #fff;
-            overflow: hidden;
-        }
-
-        /* 隐藏 details 默认样式 */
-        .favorites-section>summary {
-            list-style: none;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            background: #007bff;
-            color: white;
-            transition: background-color 0.3s;
-            user-select: none;
-            border-radius: 8px 8px 0 0;
-        }
-
-        .favorites-section>summary:hover {
-            background: #0056b3;
-        }
-
-        .favorites-section>summary h4 {
-            margin: 0;
-            color: white;
-            border: none;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .favorites-section>summary::-webkit-details-marker {
-            display: none;
-        }
-
-        .favorites-section>summary::after {
-            content: '▼';
-            font-size: 16px;
-            transition: transform 0.3s ease;
-            margin-left: 10px;
-        }
-
-        .favorites-section[open]>summary::after {
-            transform: rotate(180deg);
-        }
-
-        .favorites-content {
-            padding: 15px;
-            animation: slideDown 0.3s ease;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* 工具区块通用样式 */
+        /* 查询工具 */
         .query-tool,
         .batch-tool {
             text-align: left;
@@ -153,10 +75,19 @@
             border: 1px solid #ddd;
             border-radius: 8px;
             background-color: #fff;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
-        /* 输入框/按钮通用样式 */
+        .query-tool h4,
+        .batch-tool h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #555;
+            font-size: 14px;
+            border-bottom: 1px dashed #ccc;
+            padding-bottom: 5px;
+        }
+
         input[type="text"],
         textarea {
             width: 100%;
@@ -167,7 +98,6 @@
             border-radius: 4px;
         }
 
-        /* 单卡查询特定样式 */
         .query-tool {
             position: relative;
         }
@@ -194,10 +124,6 @@
             padding: 8px 10px;
             cursor: pointer;
             border-bottom: 1px solid #eee;
-        }
-
-        #autocompleteList li:last-child {
-            border-bottom: none;
         }
 
         #autocompleteList li:hover {
@@ -232,7 +158,6 @@
             border-radius: 3px;
         }
 
-        /* 批量翻译特定样式 */
         #decklistInput {
             resize: vertical;
             min-height: 100px;
@@ -266,125 +191,135 @@
             border-radius: 3px;
         }
 
-        /* 收藏功能相关样式 */
-        .actions-section {
-            margin-bottom: 20px;
-            text-align: left;
-            padding: 15px;
+        /* ============================================================
+           折叠区块统一样式
+           ============================================================ */
+        .favorites-section {
+            margin-bottom: 15px;
             border: 1px solid #ddd;
             border-radius: 8px;
             background-color: #fff;
+            overflow: hidden;
         }
 
-        .action-btn {
-            width: 100%;
-            padding: 10px 16px;
-            margin-bottom: 8px;
-            border: 1px solid #dee2e6;
-            border-radius: 6px;
-            background: #ffffff;
-            color: #495057;
-            font-size: 14px;
+        .favorites-section>summary {
+            list-style: none;
             cursor: pointer;
-            transition: all 0.15s ease;
-        }
-
-        .action-btn:hover {
-            background: #f8f9fa;
-            border-color: #adb5bd;
-        }
-
-        .action-btn:last-child {
-            margin-bottom: 0;
-        }
-
-        .action-btn.primary {
-            background: #007bff;
-            color: white;
-            border-color: #007bff;
-        }
-
-        .action-btn.primary:hover {
-            background: #0056b3;
-            border-color: #0056b3;
-        }
-
-        .action-btn.danger {
-            background: #dc3545;
-            color: white;
-            border-color: #dc3545;
-        }
-
-        .action-btn.danger:hover {
-            background: #c82333;
-            border-color: #c82333;
-        }
-
-        .expansions-section {
-            text-align: left;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #fff;
-        }
-
-        .expansion-list {
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            background: #ffffff;
-        }
-
-        .expansion-item {
-            padding: 12px 16px;
-            border-bottom: 1px solid #f1f3f4;
-            transition: background-color 0.15s ease;
-        }
-
-        .expansion-item:last-child {
-            border-bottom: none;
-        }
-
-        .expansion-item:hover {
-            background-color: #f8f9fa;
-        }
-
-        .expansion-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 4px;
+            padding: 12px 15px;
+            background: #007bff;
+            color: white;
+            transition: background-color 0.3s;
+            user-select: none;
+            border-radius: 8px 8px 0 0;
         }
 
-        .expansion-left {
+        .favorites-section>summary:hover {
+            background: #0056b3;
+        }
+
+        .favorites-section>summary h4 {
+            margin: 0;
+            color: white;
+            border: none;
+            font-size: 14px;
             display: flex;
             align-items: center;
             gap: 8px;
-            flex: 1;
-            min-width: 0;
         }
 
-        .expansion-checkbox {
+        .favorites-section>summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .favorites-section>summary::after {
+            content: '▼';
+            font-size: 14px;
+            transition: transform 0.3s ease;
+            margin-left: 10px;
+        }
+
+        .favorites-section[open]>summary::after {
+            transform: rotate(180deg);
+        }
+
+        .favorites-content {
+            padding: 15px;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ============================================================
+           扩展列表内部样式
+           ============================================================ */
+        .pack-item {
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+
+        .pack-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .pack-item:hover {
+            border-color: #b3d4fc;
+        }
+
+        .pack-header {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+            background: #fafafa;
+        }
+
+        .pack-header:hover {
+            background: #f0f4f8;
+        }
+
+        .pack-header .pack-checkbox {
             flex-shrink: 0;
             width: 16px;
             height: 16px;
             cursor: pointer;
+            margin-right: 10px;
         }
 
-        .expansion-name {
+        .pack-header .pack-name {
             font-weight: 500;
             color: #2c3e50;
             flex: 1;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            font-size: 13px;
         }
 
-        .expansion-name.enabled {
+        .pack-header .pack-name.enabled {
             color: #007bff;
             font-weight: 600;
         }
 
-        .expansion-count {
+        .pack-header .pack-code {
+            color: #6c757d;
+            font-size: 11px;
+            margin-left: 6px;
+        }
+
+        .pack-header .pack-count {
             background: #007bff;
             color: white;
             padding: 2px 8px;
@@ -392,223 +327,108 @@
             font-size: 11px;
             font-weight: 500;
             flex-shrink: 0;
+            margin-left: 8px;
         }
 
-        .expansion-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 8px;
-        }
-
-        .expansion-cards-container {
-            display: none;
-            margin-top: 12px;
-            padding: 12px;
-            background: #f8f9fa;
-            border-radius: 6px;
-            border: 1px solid #e9ecef;
-        }
-
-        .expansion-cards-container.show {
-            display: block;
-        }
-
-        .inline-card-item {
-            padding: 8px 12px;
-            background: white;
-            border: 1px solid #e9ecef;
-            border-radius: 4px;
-            margin-bottom: 6px;
-            font-size: 13px;
-        }
-
-        .inline-card-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .inline-card-name {
-            color: #2c3e50;
-        }
-
-        .expansion-btn {
-            padding: 4px 8px;
-            border: 1px solid #dee2e6;
-            background: white;
-            border-radius: 4px;
-            font-size: 11px;
-            cursor: pointer;
-            transition: all 0.15s ease;
-        }
-
-        .expansion-btn:hover {
-            background: #e9ecef;
-        }
-
-        .expansion-btn.rename {
-            color: #007bff;
-            border-color: #007bff;
-        }
-
-        .expansion-btn.delete {
-            color: #dc3545;
-            border-color: #dc3545;
-        }
-
-        .expansion-btn.view {
-            color: #17a2b8;
-            border-color: #17a2b8;
-        }
-
-        .expansion-btn.view.expanded {
-            background: #17a2b8;
-            color: white;
-            border-color: #17a2b8;
-        }
-
-        .empty-state {
-            text-align: center;
+        .pack-header .expand-icon {
             color: #6c757d;
-            font-style: italic;
-            padding: 24px 16px;
-            font-size: 13px;
-        }
-
-        .json-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 380px;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            display: none;
-            z-index: 10000;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(5px);
-        }
-
-        .json-modal.show {
-            display: block;
-        }
-
-        .json-modal-content {
-            background: white;
-            border-radius: 8px;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .json-modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 20px;
-            border-bottom: 1px solid #e9ecef;
-            background: #f8f9fa;
-            border-radius: 8px 8px 0 0;
-        }
-
-        .json-modal-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #2c3e50;
-            margin: 0;
-        }
-
-        .json-modal-close {
-            background: none;
-            border: none;
-            font-size: 18px;
-            color: #6c757d;
-            cursor: pointer;
-            padding: 4px;
-            border-radius: 4px;
-            transition: all 0.15s ease;
-        }
-
-        .json-modal-close:hover {
-            background: #f8f9fa;
-            color: #2c3e50;
-        }
-
-        .json-modal-body {
-            flex: 1;
-            overflow-y: auto;
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-            border-left: none;
-            border-right: none;
-            padding: 16px;
-            margin: 0;
-        }
-
-        .json-content {
-            font-family: 'Courier New', monospace;
             font-size: 12px;
-            line-height: 1.4;
-            color: #2c3e50;
-            white-space: pre-wrap;
-            word-break: break-all;
+            margin-left: 8px;
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
+            width: 16px;
+            text-align: center;
         }
 
-        .json-modal-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 20px;
-            border-top: 1px solid #e9ecef;
+        .pack-header .expand-icon.expanded {
+            transform: rotate(90deg);
+        }
+
+        /* 卡牌列表 - 折叠内容 */
+        .pack-cards {
+            display: none;
+            padding: 8px 12px 12px 38px;
             background: #f8f9fa;
-            border-radius: 0 0 8px 8px;
-            gap: 12px;
+            border-top: 1px solid #e9ecef;
+            max-height: 300px;
+            overflow-y: auto;
         }
 
-        .json-modal-btn {
-            padding: 8px 16px;
-            border: 1px solid #dee2e6;
-            border-radius: 4px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.15s ease;
+        .pack-cards.show {
+            display: block;
+            animation: slideDown 0.2s ease;
+        }
+
+        .pack-cards .card-item {
+            display: flex;
+            align-items: center;
+            padding: 4px 8px;
+            font-size: 12px;
+            color: #333;
+            border-bottom: 1px solid #f1f3f4;
+        }
+
+        .pack-cards .card-item:last-child {
+            border-bottom: none;
+        }
+
+        .pack-cards .card-item .card-code {
+            color: #6c757d;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            width: 50px;
+            flex-shrink: 0;
+        }
+
+        .pack-cards .card-item .card-name {
             flex: 1;
+            margin-left: 8px;
         }
 
-        .json-modal-btn.primary {
-            background: #007bff;
+        .pack-cards .empty-state {
+            font-size: 12px;
+            padding: 10px;
+            color: #6c757d;
+        }
+
+        .refresh-btn {
+            width: 100%;
+            padding: 8px;
+            margin-top: 12px;
+            background-color: #28a745;
             color: white;
-            border-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background-color 0.2s;
         }
 
-        .json-modal-btn.primary:hover {
-            background: #0056b3;
-            border-color: #0056b3;
-        }
-
-        .json-modal-btn.copy {
-            background: #28a745;
-            color: white;
-            border-color: #28a745;
-        }
-
-        .json-modal-btn.copy:hover {
-            background: #218838;
-            border-color: #218838;
+        .refresh-btn:hover {
+            background-color: #218838;
         }
 
         .footer {
             text-align: center;
-            padding: 12px 20px;
+            padding: 10px 20px;
             font-size: 11px;
             color: #6c757d;
             border-top: 1px solid #e9ecef;
             background: #f8f9fa;
         }
 
-        .loading {
-            opacity: 0.6;
-            pointer-events: none;
+        /* 滚动条美化 */
+        .pack-cards::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .pack-cards::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 4px;
+        }
+
+        .pack-cards::-webkit-scrollbar-track {
+            background: transparent;
         }
     </style>
 </head>
@@ -618,96 +438,57 @@
 
     <div class="container">
 
+        <!-- ============================================================
+             区块1: 翻译功能（折叠）
+             ============================================================ -->
         <details class="favorites-section">
             <summary>
-                <h4>
-                    <span>⭐</span>
-                    <span>翻译功能</span>
-                </h4>
+                <h4><span>🌐</span><span>翻译功能</span></h4>
             </summary>
-
-            <div class="mode-controls">
-                <h4>网站翻译模式控制</h4>
-                <button id="zhOnlyButton">纯中文翻译</button>
-                <button id="bilingualButton">中英对照</button>
-                <button id="restoreButton">恢复英文</button>
-            </div>
-
-            <div class="query-tool">
-                <h4>卡牌名称翻译查询 (单卡)</h4>
-                <input type="text" id="chineseNameInput" placeholder="请输入中英卡牌名称">
-                <ul id="autocompleteList"></ul>
-                <button id="queryButton">查询名称</button>
-
-                <div id="resultDiv">
-                    查询结果会显示在这里...
+            <div class="favorites-content">
+                <div class="mode-controls">
+                    <h4>网站翻译模式控制</h4>
+                    <button id="zhOnlyButton">纯中文翻译</button>
+                    <button id="bilingualButton">中英对照</button>
+                    <button id="restoreButton">恢复英文</button>
                 </div>
-            </div>
 
-            <div class="batch-tool">
-                <h4>牌表批量翻译</h4>
-                <textarea id="decklistInput" rows="8" placeholder="请贴上牌表"
-                    style="width: 100%; resize: vertical;"></textarea>
+                <div class="query-tool">
+                    <h4>卡牌名称翻译查询 (单卡)</h4>
+                    <input type="text" id="chineseNameInput" placeholder="请输入中英卡牌名称">
+                    <ul id="autocompleteList"></ul>
+                    <button id="queryButton">查询名称</button>
+                    <div id="resultDiv">查询结果会显示在这里...</div>
+                </div>
 
-                <button id="batchTranslateButton">翻译牌表</button>
-
-                <div id="batchResultDiv">
-                    翻译结果会显示在这里...
+                <div class="batch-tool">
+                    <h4>牌表批量翻译</h4>
+                    <textarea id="decklistInput" rows="6" placeholder="请贴上牌表"></textarea>
+                    <button id="batchTranslateButton">翻译牌表</button>
+                    <div id="batchResultDiv">翻译结果会显示在这里...</div>
                 </div>
             </div>
         </details>
 
-        <!-- 收藏功能折叠区块 - 使用 details/summary 元素,无需 JavaScript -->
-        <details class="favorites-section">
+        <!-- ============================================================
+             区块2: 扩展列表（折叠）
+             ============================================================ -->
+        <details class="favorites-section" id="packsSection">
             <summary>
-                <h4>
-                    <span>⭐</span>
-                    <span>收藏功能</span>
-                </h4>
+                <h4><span>📦</span><span>自订扩展包</span></h4>
             </summary>
-
-        <div class="favorites-content">
-            <div class="actions-section">
-                <button id="exportDataBtn" class="action-btn">导出数据</button>
-                <button id="importDataBtn" class="action-btn">导入数据</button>
-                <button id="clearDataBtn" class="action-btn danger">清除所有数据</button>
-            </div>
-
-            <div class="expansions-section">
-                <div class="section-title"
-                    style="font-size: 14px; font-weight: 600; color: #495057; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-                    <span>📦 我的扩展</span>
+            <div class="favorites-content">
+                <div id="packList" class="pack-list">
+                    <div class="empty-state">加载中...</div>
                 </div>
-                <div id="expansionList" class="expansion-list">
-                    <div class="empty-state">暂无扩展,请在牌库详情页面使用"⭐ 加进收藏"按钮添加</div>
-                </div>
+                <button id="refreshPacksBtn" class="refresh-btn">🔄 重新加载并应用</button>
             </div>
-        </div>
-    </details>
+        </details>
 
     </div>
 
     <div class="footer">
-        版本 3.5 | 为 RingsDB 定制
-    </div>
-
-    <input type="file" id="importFile" accept=".json" style="display: none;">
-
-    <!-- JSON 導出模態框 -->
-    <div id="jsonModal" class="json-modal">
-        <div class="json-modal-content">
-            <div class="json-modal-header">
-                <h3 class="json-modal-title">数据导出结果</h3>
-                <button id="jsonModalClose" class="json-modal-close">×</button>
-            </div>
-            <div class="json-modal-body">
-                <div id="jsonContent" class="json-content"></div>
-            </div>
-            <div class="json-modal-actions">
-                <button id="copyJsonBtn" class="json-modal-btn copy">复制到剪贴板</button>
-                <button id="jsonModalCloseFooter" class="json-modal-btn primary">关闭</button>
-            </div>
-        </div>
+        版本 3.6 | 为 RingsDB 定制
     </div>
 
     <script src="popup.js"></script>

@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "RingsDB 工具",
-  "version": "3.6",
-  "description": "RingsDB 工具:中文翻譯加上支援銀星計畫",
+  "version": "3.5",
+  "description": "RingsDB 工具，卡牌收藏管理加上中文翻譯",
   "permissions": [
     "storage",
     "activeTab",
@@ -54,9 +54,8 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "pack.json",
         "content.css",
-        "inject.js",
+        "inject.js", 
         "translation.json"
       ],
       "matches": [
