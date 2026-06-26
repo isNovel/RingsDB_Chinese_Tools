@@ -50,11 +50,15 @@ async function handleMessage(request, sender, sendResponse) {
                 break;
 
             case 'createExpansionWithCards':
-                result = await createExpansionWithCards(request.name, request.cards);
+                result = await createExpansionWithCards(request.name, request.code, request.cards);
                 break;
 
             case 'renameExpansion':
                 result = await renameExpansion(request.expansionId, request.name);
+                break;
+
+            case 'renameCodeExpansion':
+                result = await renameCodeExpansion(request.expansionId, request.code);
                 break;
 
             case 'getExpansionCards':
@@ -111,7 +115,7 @@ async function importExpansions(newExpansions) {
 
 
 // 创建新扩展并包含卡牌
-async function createExpansionWithCards(name, cardsData) {
+async function createExpansionWithCards(name, pack_code, cardsData) {
     const result = await chrome.storage.local.get('ringsdb_expansions');
     const expansions = result.ringsdb_expansions || {};
     const expansionId = generateExpansionId();
@@ -130,6 +134,7 @@ async function createExpansionWithCards(name, cardsData) {
     expansions[expansionId] = {
         id: expansionId,
         name: name || '新扩展',
+        code: pack_code || '新扩展',
         created: new Date().toISOString(),
         cards: cards
     };
@@ -176,6 +181,24 @@ async function renameExpansion(expansionId, name) {
     return { success: true, message: '扩展重命名成功' };
 }
 
+async function renameCodeExpansion(expansionId, code) {
+    const result = await chrome.storage.local.get('ringsdb_expansions');
+    const expansions = result.ringsdb_expansions || {};
+
+    if (!expansions[expansionId]) {
+        throw new Error('扩展不存在');
+    }
+
+    expansions[expansionId].code = code;
+    expansions[expansionId].modified = new Date().toISOString();
+
+    await chrome.storage.local.set({ ringsdb_expansions: expansions });
+    console.log('[RingsDB Extension] 扩展CODE重命名成功');
+
+    notifyPopupUpdate();
+
+    return { success: true, message: '扩展CODE重命名成功' };
+}
 // 获取特定扩展的卡牌
 async function getExpansionCards(expansionId) {
     const result = await chrome.storage.local.get('ringsdb_expansions');

@@ -55,7 +55,7 @@
     {
       "resources": [
         "content.css",
-        "inject.js",
+        "inject.js", 
         "translation.json"
       ],
       "matches": [

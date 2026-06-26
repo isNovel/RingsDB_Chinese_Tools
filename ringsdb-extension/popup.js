@@ -340,13 +340,14 @@ async function updateExpansionsDisplay(expansions) {
                                data-expansion-id="${expansionId}"
                                ${isEnabled ? 'checked' : ''}
                                title="在 Deck Edit 页面启用此扩展">
-                        <span class="expansion-name ${isEnabled ? 'enabled' : ''}">${escapeHtml(expansion.name || '未命名扩展')}</span>
+                        <span class="expansion-name ${isEnabled ? 'enabled' : ''}">${escapeHtml(expansion.name || '未命名扩展')}(${escapeHtml(expansion.code || '未命名')})</span>
                     </div>
                     <span class="expansion-count">${cardCount}</span>
                 </div>
                 <div class="expansion-actions">
                     <button class="expansion-btn view" data-expansion-id="${expansionId}">查看卡牌</button>
                     <button class="expansion-btn rename" data-expansion-id="${expansionId}">重命名</button>
+                    <button class="expansion-btn recode" data-expansion-id="${expansionId}">重命名簡稱</button>
                     <button class="expansion-btn delete" data-expansion-id="${expansionId}">删除</button>
                 </div>
                 <div class="expansion-cards-container" id="cards-${expansionId}"></div>
@@ -378,6 +379,8 @@ async function handleExpansionAction(e) {
         await renameExpansion(expansionId);
     } else if (button.classList.contains('delete')) {
         await deleteExpansion(expansionId);
+    }else if (button.classList.contains('recode')) {
+        await recodeExpansion(expansionId);
     }
 }
 
@@ -523,7 +526,31 @@ async function toggleExpansionCards(expansionId) {
         showError('查看扩展卡牌失败: ' + error.message);
     }
 }
+// 重命名扩展
+async function recodeExpansion(expansionId) {
+    const currentName = prompt('请输入新的扩展簡稱:');
+    if (!currentName || !currentName.trim()) {
+        return;
+    }
 
+    try {
+        const response = await chrome.runtime.sendMessage({
+            action: 'renameCodeExpansion',
+            expansionId: expansionId,
+            code: currentName.trim()
+        });
+
+        if (response.success) {
+            showSuccess('扩展簡稱重命名成功！');
+            await loadExpansions();
+        } else {
+            showError('重命名失败: ' + response.error);
+        }
+    } catch (error) {
+        console.error('[RingsDB Extension] 重命名扩展失败:', error);
+        showError('重命名失败: ' + error.message);
+    }
+}
 // 重命名扩展
 async function renameExpansion(expansionId) {
     const currentName = prompt('请输入新的扩展名称:');
